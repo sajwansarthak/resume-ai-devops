@@ -150,3 +150,79 @@ The app runs at `http://localhost:5173`.
 ## License
 
 ISC
+
+## Dockerization & Production Architecture
+
+This project includes multi-stage Docker setups and a production Docker Compose configuration to run both the frontend and backend services cleanly on an EC2 instance.
+
+### Production Docker Compose (`docker-compose.prod.yml`)
+
+Create a file named `docker-compose.prod.yml` in the root of your repository:
+
+```yaml
+version: '3.8'
+
+services:
+  backend:
+    image: ${DOCKERHUB_USER}/resume-ai-backend:${TAG}
+    container_name: resume-ai-backend
+    restart: always
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - GOOGLE_GENAI_API_KEY=${GOOGLE_GENAI_API_KEY}
+    ports:
+      - "3000:3000"
+
+  frontend:
+    image: ${DOCKERHUB_USER}/resume-ai-frontend:${TAG}
+    container_name: resume-ai-frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+sudo usermod -aG docker jenkins
+sudo systemctl restart jenkins
+
+
+
+pipeline {
+    agent any
+    environment {
+        DOCKERHUB_CREDS = credentials('dockerhub-creds')
+        DOCKERHUB_USER  = "your-dockerhub-username"
+        TAG             = "${BUILD_NUMBER}"
+    }
+    stages {
+        stage('Checkout') {
+            steps { checkout scm }
+        }
+        stage('Build Images') {
+            steps {
+                sh 'docker build -t $DOCKERHUB_USER/resume-ai-backend:$TAG ./backend'
+                sh 'docker build -t $DOCKERHUB_USER/resume-ai-frontend:$TAG ./frontend'
+            }
+        }
+        stage('Push to Docker Hub') {
+            steps {
+                sh 'echo $DOCKERHUB_CREDS_PSW \vert{} docker login -u$DOCKERHUB_CREDS_USR --password-stdin'
+                sh 'docker push $DOCKERHUB_USER/resume-ai-backend:$TAG'
+                sh 'docker push $DOCKERHUB_USER/resume-ai-frontend:$TAG'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh """
+                    export DOCKERHUB_USER=$DOCKERHUB_USER
+                    export TAG=$TAG
+                    echo "DOCKERHUB_USER=$DOCKERHUB_USER" > .env
+                    echo "TAG=$TAG" >> .env
+                    docker compose -f docker-compose.prod.yml pull
+                    docker compose -f docker-compose.prod.yml up -d
+                """
+            }
+        }
+    }
+}

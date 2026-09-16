@@ -1,0 +1,394 @@
+.interview-page {
+    // ---- design tokens (mirrors home-page) ----------------------------
+    --bg: #0a0d14;
+    --card-bg: #10141d;
+    --panel-bg: #161c29;
+    --border: rgba(255, 255, 255, 0.07);
+    --text: #f5f5f7;
+    --text-muted: #8891a3;
+    --text-faint: #5b6478;
+    --accent-1: #ec4899;
+    --accent-2: #a855f7;
+    --danger-bg: rgba(244, 63, 94, 0.16);
+    --danger-text: #fb7185;
+    --warning-bg: rgba(245, 158, 11, 0.14);
+    --warning-text: #fbbf24;
+    --success-bg: rgba(52, 211, 153, 0.14);
+    --success-text: #34d399;
+    --info-bg: rgba(59, 130, 246, 0.12);
+    --info-border: rgba(59, 130, 246, 0.28);
+    --info-text: #bfdbfe;
+
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 2.5rem 1.5rem;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+        Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+
+    &__shell {
+        width: 100%;
+        max-width: 1240px;
+        display: grid;
+        grid-template-columns: 240px minmax(0, 1fr) 260px;
+        gap: 1.5rem;
+        align-items: start;
+
+        @media (max-width: 960px) {
+            grid-template-columns: 1fr;
+        }
+    }
+}
+
+// ------------------------------------------------------------------
+// left: navigation
+// ------------------------------------------------------------------
+.interview-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 1.25rem;
+    padding: 1.5rem 1.25rem;
+    position: sticky;
+    top: 2rem;
+
+    @media (max-width: 960px) {
+        position: static;
+    }
+
+    &__score {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.15rem;
+        padding: 1.1rem 0.5rem;
+        border-radius: 1rem;
+        background: linear-gradient(135deg, rgba(236, 72, 153, 0.16), rgba(168, 85, 247, 0.16));
+        border: 1px solid var(--border);
+    }
+
+    &__score-value {
+        font-size: 1.9rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    &__score-label {
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--text-faint);
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        width: 100%;
+        border: none;
+        background: transparent;
+        color: var(--text-muted);
+        font: inherit;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-align: left;
+        padding: 0.7rem 0.75rem;
+        border-radius: 0.7rem;
+        cursor: pointer;
+        transition: background-color 0.15s ease, color 0.15s ease;
+
+        &:hover {
+            background: var(--panel-bg);
+            color: var(--text);
+        }
+
+        &--active {
+            background: var(--panel-bg);
+            color: var(--text);
+
+            .interview-nav__icon {
+                color: var(--accent-1);
+            }
+        }
+    }
+
+    &__icon {
+        width: 1.05rem;
+        height: 1.05rem;
+        flex-shrink: 0;
+        color: var(--text-faint);
+    }
+}
+
+// ------------------------------------------------------------------
+// center: main content
+// ------------------------------------------------------------------
+.interview-content {
+    min-height: 480px;
+
+    &__empty {
+        margin: 3rem 0;
+        text-align: center;
+        color: var(--text-faint);
+        font-size: 0.9rem;
+    }
+}
+
+.question-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.question-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+
+    &--open {
+        border-color: rgba(168, 85, 247, 0.35);
+    }
+
+    &__head {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        border: none;
+        background: transparent;
+        color: var(--text);
+        font: inherit;
+        text-align: left;
+        padding: 1.1rem 1.25rem;
+        cursor: pointer;
+    }
+
+    &__index {
+        flex-shrink: 0;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--accent-2);
+    }
+
+    &__question {
+        flex: 1;
+        font-size: 0.92rem;
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    &__chevron {
+        flex-shrink: 0;
+        width: 1.1rem;
+        height: 1.1rem;
+        color: var(--text-faint);
+        transition: transform 0.15s ease;
+    }
+
+    &--open &__chevron {
+        transform: rotate(180deg);
+        color: var(--accent-2);
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0 1.25rem 1.25rem 2.85rem;
+    }
+
+    &__block {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    &__block-label {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin: 0;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: var(--text-faint);
+    }
+
+    &__block-icon {
+        width: 0.95rem;
+        height: 0.95rem;
+        color: var(--accent-1);
+    }
+
+    &__block-text {
+        margin: 0;
+        font-size: 0.88rem;
+        line-height: 1.6;
+        color: var(--text-muted);
+    }
+}
+
+// ------------------------------------------------------------------
+// center: road map / preparation plan
+// ------------------------------------------------------------------
+.roadmap-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 0.25rem;
+}
+
+.roadmap-card {
+    display: flex;
+    gap: 1.1rem;
+    padding-bottom: 1.75rem;
+    position: relative;
+
+    &::before {
+        content: "";
+        position: absolute;
+        left: 1.65rem;
+        top: 3rem;
+        bottom: 0;
+        width: 1px;
+        background: var(--border);
+    }
+
+    &:last-child::before {
+        display: none;
+    }
+
+    &__day {
+        flex-shrink: 0;
+        width: 3.3rem;
+        height: 3.3rem;
+        border-radius: 999px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.05rem;
+        background: var(--panel-bg);
+        border: 1px solid var(--border);
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--text);
+        z-index: 1;
+
+        span {
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-faint);
+        }
+    }
+
+    &__content {
+        flex: 1;
+        min-width: 0;
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 1rem;
+        padding: 1rem 1.25rem;
+    }
+
+    &__focus {
+        margin: 0 0 0.6rem;
+        font-size: 0.92rem;
+        font-weight: 700;
+    }
+
+    &__tasks {
+        margin: 0;
+        padding-left: 1.1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+
+        li {
+            font-size: 0.85rem;
+            line-height: 1.55;
+            color: var(--text-muted);
+        }
+    }
+}
+
+// ------------------------------------------------------------------
+// right: skill gaps
+// ------------------------------------------------------------------
+.skill-gaps {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 1.25rem;
+    padding: 1.5rem 1.25rem;
+    position: sticky;
+    top: 2rem;
+
+    @media (max-width: 960px) {
+        position: static;
+    }
+
+    &__heading {
+        margin: 0 0 1rem;
+        font-size: 0.95rem;
+        font-weight: 700;
+    }
+
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+    }
+}
+
+.skill-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.3;
+    border: 1px solid var(--border);
+    background: var(--panel-bg);
+    color: var(--text-muted);
+
+    &--low {
+        background: var(--success-bg);
+        border-color: rgba(52, 211, 153, 0.3);
+        color: var(--success-text);
+    }
+
+    &--medium {
+        background: var(--warning-bg);
+        border-color: rgba(245, 158, 11, 0.3);
+        color: var(--warning-text);
+    }
+
+    &--high {
+        background: var(--danger-bg);
+        border-color: rgba(244, 63, 94, 0.3);
+        color: var(--danger-text);
+    }
+}

@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKERHUB_CREDS = credentials('dockerhub-creds')
-        DOCKERHUB_USER  = "yourdockerhubuser"
+        DOCKERHUB_USER  = "sajwansarthak"
         TAG             = "${BUILD_NUMBER}"
     }
     stages {

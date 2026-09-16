@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  backend:
+    image: ${DOCKERHUB_USER}/resume-ai-backend:${TAG}
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+  frontend:
+    image: ${DOCKERHUB_USER}/resume-ai-frontend:${TAG}
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

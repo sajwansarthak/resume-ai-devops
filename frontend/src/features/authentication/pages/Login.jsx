@@ -40,7 +40,7 @@ const Login = () =>{
                         <label htmlFor="password">Password</label>
                         <input 
                         onChange={(e) =>{setPassword(e.target.value)}}
-                        type="text" id="password" name="password" placeholder="Enter the password" />
+                        type="password" id="password" name="password" placeholder="Enter the password" />
                     </div>
 
                     <button className="button primary-button">Login</button>

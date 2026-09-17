@@ -32,7 +32,7 @@ async function registerUserController(req,res){
         if(isUserAlreadyExists.email === email){
             fields.push("email")
         }
-        res.status(400).json({
+        return res.status(400).json({
             message: `User already exists with this ${fields.join(" and ")}`
         })
     }
@@ -57,7 +57,12 @@ async function registerUserController(req,res){
     )
 
     //seting this token in cookie
-    res.cookie("token",token)
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: false,       // Set to false for HTTP production deployment
+        sameSite: "lax",     // Allows cookie to pass through same-IP cross-port requests
+        maxAge: 24 * 60 * 60 * 1000 // 1 day
+    });
 
     //status code 201 is used to signal  creation of new resource
     res.status(201).json({
@@ -118,7 +123,12 @@ async function loginUserController(req,res){
     )
 
     //seting token inside a cookie 
-    res.cookie("token",token)
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: false,       // Set to false for HTTP production deployment
+        sameSite: "lax",     // Allows cookie to pass through same-IP cross-port requests
+        maxAge: 24 * 60 * 60 * 1000 // 1 day
+    });
 
     res.status(200).json({
         message: "User loggedIn successfully",

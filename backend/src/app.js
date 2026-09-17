@@ -8,7 +8,7 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin: "http://13.233.122.59", // or your frontend EC2 URL
+    origin: "http://13.233.122.59/", // or your frontend EC2 URL
     credentials: true
 }))
 

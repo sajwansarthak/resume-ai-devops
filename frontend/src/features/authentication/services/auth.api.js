@@ -4,7 +4,7 @@ import axios from "axios"
 
 //making code clean creating the repeated function one and using them using api.post/get
 const api = axios.create({
-    baseURL: 'http://13.233.122.59:3000', // Points to your EC2 backend container
+    baseURL: 'http://13.233.122.59:5000', // Points to your EC2 backend container
     withCredentials: true
 })
 
